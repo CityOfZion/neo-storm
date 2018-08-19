@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/CityOfZion/neo-go-sc/compiler"
 	"github.com/urfave/cli"
 )
 
@@ -43,6 +44,15 @@ func contactCompile(ctx *cli.Context) error {
 	src := ctx.String("in")
 	if len(src) == 0 {
 		return cli.NewExitError(errNoInput, 1)
+	}
+
+	o := &compiler.Options{
+		Outfile: ctx.String("out"),
+		Debug:   ctx.Bool("debug"),
+	}
+
+	if err := compiler.CompileAndSave(src, o); err != nil {
+		return cli.NewExitError(err, 1)
 	}
 
 	return nil
