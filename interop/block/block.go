@@ -6,7 +6,7 @@ import "github.com/CityOfZion/neo-go-sc/interop/transaction"
 // smart contracts that are written in the neo-go-sc framework.
 
 // Block stubs a NEO block type.
-type Block interface{}
+type Block struct{}
 
 // GetTransactionCount return the number of recorded transactions in the given block.
 func GetTransactionCount(b Block) int {

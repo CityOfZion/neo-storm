@@ -4,4 +4,4 @@ package transaction
 // smart contracts that are written in the neo-go-sc framework.
 
 // Transaction stubs a NEO transaction type.
-type Transaction interface{}
+type Transaction struct{}
