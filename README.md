@@ -29,13 +29,25 @@
 - Package manager for smart contract modules that are written in Go
 
 # Installation
+`neo-go-sc` uses [dep](https://github.com/golang/dep) as its dependency manager. After installing `dep` you can run:
 ```
-Coming soon..
+make install
 ```
 
-# Usage
+After the installation is completed, you can find the binary in `bin/neo-go-sc`. 
+
+# Getting started
+
+### Compiling smart contracts
+To compile a smart contract run the following:
 ```
-Coming soon..
+./bin/neo-go-sc compile -i path/to/file.go 
+```
+This will output an `.avm` file in the same directory you executed this command in. 
+
+You can change location directory of the output file by adding the `-o, --out` flag.
+```
+./bin/neo-go-sc compile -i path/to/file.go -o path/to/file.avm 
 ```
 
 # Contributing

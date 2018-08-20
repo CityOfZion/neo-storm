@@ -5,11 +5,16 @@
   name = "github.com/CityOfZion/neo-go"
   packages = [
     "pkg/crypto",
-    "pkg/util",
-    "pkg/vm"
+    "pkg/util"
   ]
   revision = "34a37ff51d1aa69b5494f9494829950b975e5192"
   version = "0.44.7"
+
+[[projects]]
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
+  version = "v1.20.0"
 
 [[projects]]
   branch = "master"
@@ -31,6 +36,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a37fd71b9837be1746fcfdaf39cdc964b8ab99cb444552053d1537e56240ae2d"
+  inputs-digest = "89b2b342056085a16d114cc1ff58098b8a9813b4825293b64e8a32c923882d00"
   solver-name = "gps-cdcl"
   solver-version = 1
