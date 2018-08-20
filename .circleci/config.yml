@@ -7,4 +7,4 @@ jobs:
     steps:
       - checkout
       - run: make install 
-      - run: make tests 
+      - run: make test 
