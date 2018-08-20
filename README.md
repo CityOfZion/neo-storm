@@ -28,7 +28,8 @@
 - Tooling for deploying smart contracts in production environments
 - Package manager for smart contract modules that are written in Go
 
-# Installation macOS and unix
+# Installation
+### Unix
 `neo-go-sc` uses [dep](https://github.com/golang/dep) as its dependency manager. After installing `dep` you can run:
 ```
 make install
