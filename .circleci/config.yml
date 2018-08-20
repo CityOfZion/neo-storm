@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: vidsyhq/go-builder:latest
+    working_directory: /go/src/github.com/CityOfZion/neo-go-sc
+    steps:
+      - checkout
+      - run: make install 
+      - run: make test 
