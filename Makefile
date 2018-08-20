@@ -16,4 +16,4 @@ clean:
 
 test:
 	@echo "running tests"
-	@go test ./...
+	@go test ./... -cover
