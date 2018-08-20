@@ -1,5 +1,24 @@
-# NEO-GO-SC
-Smart contract framework for the NEO smart economy written in the Go programming language.
+<p align="center">
+<img
+    src="http://res.cloudinary.com/vidsy/image/upload/v1503160820/CoZ_Icon_DARKBLUE_200x178px_oq0gxm.png"
+    width="125px"
+  >
+</p>
+
+<h1 align="center">neo-go-sc</h1>
+
+<p align="center">
+    Smart contract framework for the NEO smart economy written in the Go programming language.
+</p>
+
+<p align="center">
+  <a href="https://github.com/CityOfZion/neo-go-sc/releases">
+    <img src="https://img.shields.io/github/tag/CityOfZion/neo-go-sc.svg?style=flat">
+  </a>
+  <a href="https://circleci.com/gh/CityOfZion/neo-go-sc/tree/master">
+    <img src="https://circleci.com/gh/CityOfZion/neo-go-sc/tree/master.svg?style=shield">
+  </a>
+</p>
 
 # Overview
 - Golang to NVM bytecode compiler
