@@ -7,43 +7,42 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/CityOfZion/neo-go/pkg/util"
-	"github.com/CityOfZion/neo-go/pkg/vm"
+	"github.com/CityOfZion/neo-go-sc/vm"
 )
 
-func emit(w *bytes.Buffer, op vm.Opcode, b []byte) error {
-	if err := w.WriteByte(byte(op)); err != nil {
+func emit(w *bytes.Buffer, instr vm.Instruction, b []byte) error {
+	if err := w.WriteByte(byte(instr)); err != nil {
 		return err
 	}
 	_, err := w.Write(b)
 	return err
 }
 
-func emitOpcode(w *bytes.Buffer, op vm.Opcode) error {
-	return w.WriteByte(byte(op))
+func emitOpcode(w *bytes.Buffer, instr vm.Instruction) error {
+	return w.WriteByte(byte(instr))
 }
 
 func emitBool(w *bytes.Buffer, ok bool) error {
 	if ok {
-		return emitOpcode(w, vm.Opusht)
+		return emitOpcode(w, vm.PUSHT)
 	}
-	return emitOpcode(w, vm.Opushf)
+	return emitOpcode(w, vm.PUSHF)
 }
 
 func emitInt(w *bytes.Buffer, i int64) error {
 	if i == -1 {
-		return emitOpcode(w, vm.Opushm1)
+		return emitOpcode(w, vm.PUSHM1)
 	}
 	if i == 0 {
-		return emitOpcode(w, vm.Opushf)
+		return emitOpcode(w, vm.PUSHF)
 	}
 	if i > 0 && i < 16 {
-		val := vm.Opcode((int(vm.Opush1) - 1 + int(i)))
+		val := vm.Instruction((int(vm.PUSH1) - 1 + int(i)))
 		return emitOpcode(w, val)
 	}
 
 	bInt := big.NewInt(i)
-	val := util.ArrayReverse(bInt.Bytes())
+	val := arrayReverse(bInt.Bytes())
 	return emitBytes(w, val)
 }
 
@@ -57,18 +56,18 @@ func emitBytes(w *bytes.Buffer, b []byte) error {
 		n   = len(b)
 	)
 
-	if n <= int(vm.Opushbytes75) {
-		return emit(w, vm.Opcode(n), b)
+	if n <= int(vm.PUSHBYTES75) {
+		return emit(w, vm.Instruction(n), b)
 	} else if n < 0x100 {
-		err = emit(w, vm.Opushdata1, []byte{byte(n)})
+		err = emit(w, vm.PUSHDATA1, []byte{byte(n)})
 	} else if n < 0x10000 {
 		buf := make([]byte, 2)
 		binary.LittleEndian.PutUint16(buf, uint16(n))
-		err = emit(w, vm.Opushdata2, buf)
+		err = emit(w, vm.PUSHDATA2, buf)
 	} else {
 		buf := make([]byte, 4)
 		binary.LittleEndian.PutUint32(buf, uint32(n))
-		err = emit(w, vm.Opushdata4, buf)
+		err = emit(w, vm.PUSHDATA4, buf)
 	}
 	if err != nil {
 		return err
@@ -84,25 +83,37 @@ func emitSyscall(w *bytes.Buffer, api string) error {
 	buf := make([]byte, len(api)+1)
 	buf[0] = byte(len(api))
 	copy(buf[1:len(buf)], []byte(api))
-	return emit(w, vm.Osyscall, buf)
+	return emit(w, vm.SYSCALL, buf)
 }
 
-func emitCall(w *bytes.Buffer, op vm.Opcode, label int16) error {
-	return emitJmp(w, op, label)
+func emitCall(w *bytes.Buffer, instr vm.Instruction, label int16) error {
+	return emitJmp(w, instr, label)
 }
 
-func emitJmp(w *bytes.Buffer, op vm.Opcode, label int16) error {
-	if !isOpcodeJmp(op) {
-		return fmt.Errorf("opcode %s is not a jump or call type", op)
+func emitJmp(w *bytes.Buffer, instr vm.Instruction, label int16) error {
+	if !isInstrJmp(instr) {
+		return fmt.Errorf("instruction %s is not a jump or call type", instr)
 	}
 	buf := make([]byte, 2)
 	binary.LittleEndian.PutUint16(buf, uint16(label))
-	return emit(w, op, buf)
+	return emit(w, instr, buf)
 }
 
-func isOpcodeJmp(op vm.Opcode) bool {
-	if op == vm.Ojmp || op == vm.Ojmpifnot || op == vm.Ojmpif || op == vm.Ocall {
+func isInstrJmp(instr vm.Instruction) bool {
+	if instr == vm.JMP || instr == vm.JMPIFNOT || instr == vm.JMPIF || instr == vm.CALL {
 		return true
 	}
 	return false
+}
+
+func arrayReverse(b []byte) []byte {
+	// Protect from big.Ints that have 1 len bytes.
+	if len(b) < 2 {
+		return b
+	}
+	dest := make([]byte, len(b))
+	for i, j := 0, len(b)-1; i < j; i, j = i+1, j-1 {
+		dest[i], dest[j] = b[j], b[i]
+	}
+	return dest
 }
