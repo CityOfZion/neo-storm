@@ -13,3 +13,7 @@ deps:
 clean:
 	@echo "cleaning build artifacts"
 	@rm -rf $(BUILD_DIR) 
+
+test:
+	@echo "running tests"
+	@go test ./...
