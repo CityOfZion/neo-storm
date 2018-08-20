@@ -569,7 +569,7 @@ func (c *codegen) convertBuiltin(expr *ast.CallExpr) {
 		emitOpcode(c.prog, vm.HASH160)
 	case "FromAddress":
 		// We can be sure that this is a ast.BasicLit just containing a simple
-		// address string. Note that the string returned from callin Value will
+		// address string. Note that the string returned from calling Value will
 		// contain double qoutes that need to be stripped.
 		addressStr := expr.Args[0].(*ast.BasicLit).Value
 		addressStr = strings.Replace(addressStr, "\"", "", 2)
