@@ -1,9 +1,11 @@
 BUILD_DIR=bin
-EXEC_NAME=neo-go-sc
+BIN=neo-go-sc
+INSTALL_PATH=/usr/local/bin
 
 install: deps
 	@echo "installing neo-go-sc framework"
-	@go build -o $(BUILD_DIR)/$(EXEC_NAME) ./cli
+	@go build -o $(BUILD_DIR)/$(BIN) ./cli
+	@cp $(BUILD_DIR)/$(BIN) $(INSTALL_PATH) 
 	@echo "done installing, happy coding!"
 
 deps: 
@@ -13,6 +15,10 @@ deps:
 clean:
 	@echo "cleaning build artifacts"
 	@rm -rf $(BUILD_DIR) 
+
+uninstall:
+	@echo "uninstalling neo-go-sc framework"
+	@rm -rf $(INSTALL_PATH)/$(BIN)
 
 test:
 	@echo "running tests"
