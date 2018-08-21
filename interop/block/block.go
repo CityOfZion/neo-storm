@@ -2,7 +2,7 @@ package block
 
 import "github.com/CityOfZion/neo-go-sc/interop/transaction"
 
-// Package Block provides function signatures that can be used inside
+// Package block provides function signatures that can be used inside
 // smart contracts that are written in the neo-go-sc framework.
 
 // Block stubs a NEO block type.

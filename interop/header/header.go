@@ -1,6 +1,6 @@
 package header
 
-// Package Header provides function signatures that can be used inside
+// Package header provides function signatures that can be used inside
 // smart contracts that are written in the neo-go-sc framework.
 
 // Header stubs a NEO block header type.
