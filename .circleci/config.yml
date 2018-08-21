@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: vidsyhq/go-builder:latest
-    working_directory: /go/src/github.com/CityOfZion/neo-go-sc
+    working_directory: /go/src/github.com/CityOfZion/neo-storm
     steps:
       - checkout
       - run: make install 

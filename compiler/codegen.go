@@ -10,7 +10,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/CityOfZion/neo-go-sc/vm"
+	"github.com/CityOfZion/neo-storm/vm"
 	"github.com/CityOfZion/neo-go/pkg/crypto"
 )
 

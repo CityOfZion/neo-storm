@@ -4,7 +4,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/CityOfZion/neo-go-sc/compiler"
+	"github.com/CityOfZion/neo-storm/compiler"
 	"github.com/urfave/cli"
 )
 
@@ -14,7 +14,7 @@ var (
 
 func main() {
 	ctl := cli.NewApp()
-	ctl.Name = "neo-go-sc"
+	ctl.Name = "neo-storm"
 	ctl.Usage = "Neo smart contract framework for the Go programming language"
 	ctl.Commands = []cli.Command{
 		{
