@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/CityOfZion/neo-go-sc/vm"
+	"github.com/CityOfZion/neo-storm/vm"
 )
 
 func emit(w *bytes.Buffer, instr vm.Instruction, b []byte) error {

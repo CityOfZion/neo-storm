@@ -7,8 +7,8 @@
     "pkg/crypto",
     "pkg/util"
   ]
-  revision = "34a37ff51d1aa69b5494f9494829950b975e5192"
-  version = "0.44.7"
+  revision = "d77354db66d53b075e6ebe0002c4a81d3e16f227"
+  version = "0.44.8"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -20,7 +20,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ripemd160"]
-  revision = "aabede6cba87e37f413b3e60ebfc214f8eeca1b0"
+  revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
 
 [[projects]]
   branch = "master"
@@ -31,7 +31,7 @@
     "go/internal/cgo",
     "go/loader"
   ]
-  revision = "7d1dc997617fb662918b6ea95efc19faa87e1cf8"
+  revision = "c1406c36efe20fb423f43a73518f0454febeed1f"
 
 [solve-meta]
   analyzer-name = "dep"

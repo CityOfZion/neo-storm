@@ -1,9 +1,9 @@
 BUILD_DIR=bin
-BIN=neo-go-sc
+BIN=neo-storm
 INSTALL_PATH=/usr/local/bin
 
 install: deps
-	@echo "installing neo-go-sc framework"
+	@echo "installing neo-storm framework"
 	@go build -o $(BUILD_DIR)/$(BIN) ./cli
 	@cp $(BUILD_DIR)/$(BIN) $(INSTALL_PATH) 
 	@echo "done installing, happy coding!"
@@ -17,7 +17,7 @@ clean:
 	@rm -rf $(BUILD_DIR) 
 
 uninstall:
-	@echo "uninstalling neo-go-sc framework"
+	@echo "uninstalling neo-storm framework"
 	@rm -rf $(INSTALL_PATH)/$(BIN)
 
 test:
