@@ -1,5 +1,8 @@
 package runtime
 
+// Package runtime provides function signatures that can be used inside
+// smart contracts that are written in the neo-go-sc framework.
+
 // CheckWitness verifies if the given hash is the invoker of the contract.
 func CheckWitness(hash []byte) bool {
 	return true
