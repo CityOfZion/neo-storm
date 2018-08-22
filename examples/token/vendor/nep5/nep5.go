@@ -22,9 +22,6 @@ type Token struct {
 	CirculationKey string
 }
 
-// TODO: Transfer event
-// DoTransfer := action.RegisterAction("transfer", "from", "to", "amount")
-
 // GetSupply gets the token totalSupply value from VM storage
 func (t Token) GetSupply(ctx storage.Context) interface{} {
 	return storage.Get(ctx, t.CirculationKey)
@@ -54,7 +51,7 @@ func (t Token) Transfer(ctx storage.Context, from []byte, to []byte, amount int)
 	amountTo := storage.Get(ctx, to).(int)
 	totalAmountTo := amountTo + amount
 	storage.Put(ctx, to, totalAmountTo)
-	// DoTransfer(from, to, amount)
+	runtime.Notify("transfer", from, to, amount)
 	return true
 }
 

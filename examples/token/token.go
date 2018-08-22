@@ -31,30 +31,30 @@ func Main(operation string, args []interface{}) interface{} {
 	token := CreateToken()
 
 	if operation == "name" {
-		return nep5.Name
+		return token.Name
 	}
 	if operation == "symbol" {
-		return nep5.Symbol
+		return token.Symbol
 	}
 	if operation == "decimals" {
-		return nep5.Decimals
+		return token.Decimals
 	}
 
 	// The following operations need ctx
 	ctx := storage.GetContext()
 
 	if operation == "totalSupply" {
-		return nep5.GetSupply(ctx)
+		return token.GetSupply(ctx)
 	}
 	if operation == "balanceOf" {
 		hodler := args[0].([]byte)
-		return nep5.BalanceOf(ctx, hodler)
+		return token.BalanceOf(ctx, hodler)
 	}
 	if operation == "transfer" && CheckArgs(args, 3) {
 		from := args[0].([]byte)
 		to := args[1].([]byte)
 		amount := args[2].(int)
-		return nep5.Transfer(ctx, from, to, amount)
+		return token.Transfer(ctx, from, to, amount)
 	}
 
 	return true
