@@ -1,6 +1,6 @@
 package compiler
 
-var syscallss = map[string]map[string]string{
+var syscalls = map[string]map[string]string{
 	"storage": {
 		"GetContext": "System.Storage.GetContext",
 		"Put":        "System.Storage.Put",
@@ -55,18 +55,24 @@ var syscallss = map[string]map[string]string{
 		"GetAssetID":   "Neo.Asset.GetAssetID",
 		"GetAssetType": "Neo.Asset.GetAssetType",
 		"GetAmount":    "Neo.Asset.GetAmount",
+		"Create":       "Neo.Asset.Create",
+		"Renew":        "Neo.Asset.Renew",
 	},
 	"contract": {
-		"GetScript": "Neo.Contract.GetScript",
-		"IsPayable": "Neo.Contract.IsPayable",
+		"GetScript":         "Neo.Contract.GetScript",
+		"IsPayable":         "Neo.Contract.IsPayable",
+		"Create":            "Neo.Contract.Create",
+		"Destroy":           "Neo.Contract.Destroy",
+		"Migrate":           "Neo.Contract.Migrate",
+		"GetStorageContext": "Neo.Contract.GetStorageContext",
 	},
 	"input": {
 		"GetHash":  "Neo.Input.GetHash",
 		"GetIndex": "Neo.Input.GetIndex",
 	},
 	"output": {
-		"GetAssetID", "Neo.Output.GetAssetID",
-		"GetValue", "Neo.Output.GetValue",
-		"GetScriptHash", "Neo.Output.GetScriptHash",
+		"GetAssetID":    "Neo.Output.GetAssetID",
+		"GetValue":      "Neo.Output.GetValue",
+		"GetScriptHash": "Neo.Output.GetScriptHash",
 	},
 }
