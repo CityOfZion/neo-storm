@@ -4,11 +4,80 @@
 [[projects]]
   name = "github.com/CityOfZion/neo-go"
   packages = [
+    "config",
+    "pkg/core",
+    "pkg/core/storage",
+    "pkg/core/transaction",
     "pkg/crypto",
-    "pkg/util"
+    "pkg/network",
+    "pkg/network/payload",
+    "pkg/rpc",
+    "pkg/rpc/result",
+    "pkg/rpc/wrappers",
+    "pkg/smartcontract",
+    "pkg/util",
+    "pkg/vm"
   ]
   revision = "d77354db66d53b075e6ebe0002c4a81d3e16f227"
   version = "0.44.8"
+
+[[projects]]
+  name = "github.com/go-redis/redis"
+  packages = [
+    ".",
+    "internal",
+    "internal/consistenthash",
+    "internal/hashtag",
+    "internal/pool",
+    "internal/proto",
+    "internal/singleflight",
+    "internal/util"
+  ]
+  revision = "480db94d33e6088e08d628833b6c0705451d24bb"
+  version = "v6.13.2"
+
+[[projects]]
+  name = "github.com/go-yaml/yaml"
+  packages = ["."]
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
+  version = "v2.2.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golang/snappy"
+  packages = ["."]
+  revision = "2e65f85255dbc3072edf28d6b5b8efc472979f5a"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "3e01752db0189b9157070a0e1668a620f9a85da2"
+  version = "v1.0.6"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/syndtr/goleveldb"
+  packages = [
+    "leveldb",
+    "leveldb/cache",
+    "leveldb/comparer",
+    "leveldb/errors",
+    "leveldb/filter",
+    "leveldb/iterator",
+    "leveldb/journal",
+    "leveldb/memdb",
+    "leveldb/opt",
+    "leveldb/storage",
+    "leveldb/table",
+    "leveldb/util"
+  ]
+  revision = "ae2bd5eed72d46b28834ec3f60db3a3ebedd8dbd"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -19,8 +88,20 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["ripemd160"]
+  packages = [
+    "ripemd160",
+    "ssh/terminal"
+  ]
   revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = [
+    "unix",
+    "windows"
+  ]
+  revision = "3b58ed4ad3395d483fc92d5d14123ce2c3581fec"
 
 [[projects]]
   branch = "master"
@@ -36,6 +117,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "89b2b342056085a16d114cc1ff58098b8a9813b4825293b64e8a32c923882d00"
+  inputs-digest = "3d2d95b5bc46c9c35c06df93df0beeb34fd076a9f9a113b148d1e438bba0eedc"
   solver-name = "gps-cdcl"
   solver-version = 1
