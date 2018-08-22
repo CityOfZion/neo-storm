@@ -1,4 +1,4 @@
-package token
+package nep5
 
 import (
 	"github.com/CityOfZion/neo-storm/interop/engine"

@@ -1,7 +1,7 @@
 package token_contract
 
 import (
-	"token"
+	"nep5"
 
 	"github.com/CityOfZion/neo-storm/interop/storage"
 	"github.com/CityOfZion/neo-storm/interop/util"
@@ -15,8 +15,8 @@ const (
 var owner = util.FromAddress("AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y")
 
 // CreateToken initializes the Token Interface for the Smart Contract to operate with
-func CreateToken() token.Token {
-	return token.Token{
+func CreateToken() nep5.Token {
+	return nep5.Token{
 		Name:           "Awesome NEO Token",
 		Symbol:         "ANT",
 		Decimals:       decimals,
@@ -31,30 +31,30 @@ func Main(operation string, args []interface{}) interface{} {
 	token := CreateToken()
 
 	if operation == "name" {
-		return token.Name
+		return nep5.Name
 	}
 	if operation == "symbol" {
-		return token.Symbol
+		return nep5.Symbol
 	}
 	if operation == "decimals" {
-		return token.Decimals
+		return nep5.Decimals
 	}
 
 	// The following operations need ctx
 	ctx := storage.GetContext()
 
 	if operation == "totalSupply" {
-		return token.GetSupply(ctx)
+		return nep5.GetSupply(ctx)
 	}
 	if operation == "balanceOf" {
 		hodler := args[0].([]byte)
-		return token.BalanceOf(ctx, hodler)
+		return nep5.BalanceOf(ctx, hodler)
 	}
 	if operation == "transfer" && CheckArgs(args, 3) {
 		from := args[0].([]byte)
 		to := args[1].([]byte)
 		amount := args[2].(int)
-		return token.Transfer(ctx, from, to, amount)
+		return nep5.Transfer(ctx, from, to, amount)
 	}
 
 	return true
