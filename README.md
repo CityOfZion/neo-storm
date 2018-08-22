@@ -35,20 +35,20 @@
 make install
 ```
 
-After the installation is completed, you can find the binary in `bin/neo-storm` or globally use `neo-storm`. 
+After the installation is completed, you can find the binary in `bin/neo-storm` or globally use `neo-storm`.
 
 # Getting started
 
 ### Compiling smart contracts
 To compile a smart contract run the following:
 ```
-neo-storm compile -i path/to/file.go 
+neo-storm compile -i path/to/file.go
 ```
-This will output an `.avm` file in the same directory you executed this command in. 
+This will output an `.avm` file in the same directory you executed this command in.
 
 You can change location directory of the output file by adding the `-o, --out` flag.
 ```
-neo-storm compile -i path/to/file.go -o path/to/file.avm 
+neo-storm compile -i path/to/file.go -o path/to/file.avm
 ```
 
 # Contributing
@@ -58,8 +58,10 @@ Feel free to contribute to this project after reading the
 # Contact
 - [@anthdm](https://github.com/anthdm) on Github
 - [@anthdm](https://twitter.com/anthdm) on Twitter
-- Reach out to me on the [NEO Discord](https://discordapp.com/invite/R8v48YA) channel
-- Send me an email anthony@cityofzion.io
+- [@jeroenptrs](https://github.com/jeroenptrs) on Github
+- [@_jptrs](https://twitter.com/jptrs) on Twitter
+- Reach out to us on the [NEO Discord](https://discordapp.com/invite/R8v48YA) channel
+- Send us an email: anthony@cityofzion.io
 
 # Licence
 - Open-source MIT
