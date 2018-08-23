@@ -86,7 +86,7 @@ func IsUsableAddress(addr []byte) bool {
 
 		// Check if a smart contract is calling scripthash
 		callingScriptHash := engine.GetCallingScriptHash()
-		if util.EqualBytes(callingScriptHash, addr) {
+		if util.Equals(callingScriptHash, addr) {
 			return true
 		}
 	}
