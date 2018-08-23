@@ -59,7 +59,7 @@ Feel free to contribute to this project after reading the
 - [@anthdm](https://github.com/anthdm) on Github
 - [@anthdm](https://twitter.com/anthdm) on Twitter
 - [@jeroenptrs](https://github.com/jeroenptrs) on Github
-- [@_jptrs](https://twitter.com/jptrs) on Twitter
+- [@_jptrs](https://twitter.com/_jptrs) on Twitter
 - Reach out to us on the [NEO Discord](https://discordapp.com/invite/R8v48YA) channel
 - Send us an email: anthony@cityofzion.io
 
