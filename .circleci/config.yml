@@ -6,5 +6,5 @@ jobs:
     working_directory: /go/src/github.com/CityOfZion/neo-storm
     steps:
       - checkout
-      - run: make install 
-      - run: make test 
+      - run: make install
+      - run: make test
