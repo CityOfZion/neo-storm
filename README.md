@@ -39,6 +39,20 @@ After the installation is completed, you can find the binary in `bin/neo-storm` 
 
 # Getting started
 
+### Creating a smart contract package
+To create a new smart contract package you can run the following command:
+```
+neo-storm init --name mycontract
+```
+
+This will generate a folder called `mycontract` with a `main.go` file inside.
+
+The folder structure will be the following:
+```
+- mycontract
+    - main.go
+```
+
 ### Compiling smart contracts
 To compile a smart contract run the following:
 ```
