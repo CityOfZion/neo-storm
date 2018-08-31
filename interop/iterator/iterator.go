@@ -6,7 +6,7 @@ package iterator
 // Iterator stubs a NEO iterator object type.
 type Iterator struct{}
 
-// Create creates an iterator of the given items.
+// Create creates an iterator from the given items.
 func Create(items []interface{}) Iterator {
 	return Iterator{}
 }
