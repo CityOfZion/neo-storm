@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/CityOfZion/neo-go/pkg/rpc"
 	"github.com/CityOfZion/neo-storm/compiler"
@@ -15,7 +16,21 @@ import (
 )
 
 var (
-	errNoInput = errors.New("No input file was found, specify an input file with the '--in or -i' flag")
+	errNoInput             = errors.New("No input file was found, specify an input file with the '--in or -i' flag")
+	errNoSmartContractName = errors.New("No name was provided, specify the '--name or -n' flag")
+	errFileExist           = errors.New("A file with given smart-contract name already exists")
+)
+
+var (
+	// smartContractTmpl is written to a file when used with `init` command.
+	// %s is parsed to be the smartContractName
+	smartContractTmpl = `package %s
+
+import "github.com/CityOfZion/neo-storm/interop/runtime"
+
+func Main(op string, args []interface{}) {
+    runtime.Notify("Hello world!")
+}`
 )
 
 func main() {
@@ -53,8 +68,49 @@ func main() {
 				},
 			},
 		},
+		{
+			Name:   "init",
+			Usage:  "initialize a new smart-contract in a directory with boiler plate code",
+			Action: initSmartContract,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name, n",
+					Usage: "name of the smart-contract to be initialized",
+				},
+			},
+		},
 	}
 	ctl.Run(os.Args)
+}
+
+// initSmartContract initializes a given directory with some boiler plate code.
+func initSmartContract(ctx *cli.Context) error {
+	scName := ctx.String("name")
+	if scName == "" {
+		return cli.NewExitError(errNoSmartContractName, 1)
+	}
+
+	// Check if the file already exists, if yes, exit
+	if _, err := os.Stat(scName); err == nil {
+		return cli.NewExitError(errFileExist, 1)
+	}
+
+	basePath := scName
+	fileName := "main.go"
+
+	// create base directory
+	err := os.Mkdir(basePath, os.ModePerm)
+	if err != nil {
+		return cli.NewExitError(err, 1)
+	}
+
+	data := []byte(fmt.Sprintf(smartContractTmpl, scName))
+	err = ioutil.WriteFile(filepath.Join(basePath, fileName), data, 0644)
+	if err != nil {
+		return cli.NewExitError(err, 1)
+	}
+	fmt.Printf("Successfully initialized smart contract [%s]\n", scName)
+	return nil
 }
 
 func contractCompile(ctx *cli.Context) error {
