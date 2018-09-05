@@ -151,17 +151,227 @@ GetTransaction(hash []byte) transaction.Transaction
 ```
 Returns a transaction by the given hash.
 
+#### GetContract
+```
+GetContract(scriptHash []byte) contract.Contract
+```
+Returns the contract found by the given script hash.
+
+#### GetAccount
+```
+GetAccount(scriptHash []byte) account.Account
+```
+Returns the account found by the given script hash.
+
+#### GetValiditors
+```
+GetValidators() [][]byte
+```
+Returns a list of validators public keys.
+
+#### GetAsset
+```
+GetAsset(assetID []byte) asset.Asset
+```
+Returns the asset found by the given asset id.
+
 ## Contract
+#### GetScript
+```
+GetScript(c Contract) []byte
+```
+Return the script of the given contract.
+
+#### IsPayable
+```
+IsPayable(c Contract) bool
+```
+Returns whether the given contract is payable.
+
+#### GetStorageContext 
+```
+GetStorageContext(c Contract)
+```
+Returns the storage context of the given contract.
+
+#### Create
+```
+Create(
+    script []byte, 
+    params []interface{}, 
+    returnType byte, 
+    properties interface{}, 
+    name, 
+    version, 
+    author, 
+    email, 
+    description string)
+```
+Creates a new contract on the blockchain.
+
+#### Migrate
+```
+Migrate(
+    script []byte, 
+    params []interface{}, 
+    returnType byte, 
+    properties interface{}, 
+    name, 
+    version, 
+    author, 
+    email, 
+    description string)
+```
+Migrates a contract on the blockchain.
+
+#### Destroy
+```
+Destroy(c Contract) 
+```
+Deletes the given contract from the blockchain.
 
 ## Crypto
+#### SHA1
+```
+SHA1(data []byte) []byte
+```
+Computes the sha1 hash of the given bytes
+
+#### SHA256
+```
+SHA256(data []byte) []byte
+```
+Computes the sha256 hash of the given bytes
+
+#### Hash256
+```
+Hash256(data []byte) []byte
+```
+Computes the sha256^2 of the given data.
+
+#### Hash160
+```
+Hash160(data []byte) []byte) []byte
+```
+Computes the ripemd160 over the sha256 hash of the given data.
 
 ## Engine
+#### GetScriptContainer
+```
+GetScriptContainer() transaction.Transaction
+```
+Returns the transaction that is in the context of the VM execution.
+
+#### GetExecutingScriptHash
+```
+GetExecutingScriptHash() []byte
+```
+Returns the script hash of the contract that is currently being executed.
+
+#### GetCallingScriptHash
+```
+GetCallingScriptHash() []byte
+```
+Returns the script hash of the contract that has started the execution of the current script.
+
+#### GetEntryScriptHash
+```
+GetEntryScriptHash() []byte
+```
+Returns the script hash of the contract that started the execution from the start. 
 
 ## Enumerator
+#### Create
+```
+Create(items []inteface{}) Enumerator
+```
+Create a enumerator from the given items.
+
+#### Next
+```
+Next(e Enumerator) interface{}
+```
+Returns the next item from the given enumerator.
+
+#### Value
+```
+Value(e Enumerator) interface{}
+```
+Returns the enumerator value.
 
 ## Iterator
+#### Create
+```
+Create(items []inteface{}) Iterator
+```
+Creates an iterator from the given items.
+
+#### Key
+```
+Key(it Iterator) interface{}
+```
+Return the key from the given iterator.
+
+#### Keys
+```
+Keys(it Iterator) []interface{}
+```
+Returns the iterator's keys 
+
+#### Values
+```
+Values(it Iterator) []interface{}
+```
+Returns the iterator's values 
 
 ## Header
+#### GetIndex
+```
+GetIndex(h Header) int
+```
+Returns the height of the given header.
+
+#### GetHash
+```
+GetHash(h Header) []byte
+```
+Returns the hash of the given header.
+
+#### GetPrevHash
+```
+GetPrevhash(h Header) []byte
+```
+Returns the previous hash of the given header.
+
+#### GetTimestamp
+```
+GetTimestamp(h Header) int
+```
+Returns the timestamp of the given header.
+
+#### GetVersion
+```
+GetVersion(h Header) int
+```
+Returns the version of the given header.
+
+#### GetMerkleroot
+```
+GetMerkleRoot(h Header) []byte
+```
+Returns the merkle root of the given header.
+
+#### GetConsensusData
+```
+GetConsensusData(h Header) int
+```
+Returns the consensus data of the given header.
+
+#### GetNextConsensus
+```
+GetNextConsensus(h Header) []byte
+```
+Returns the next consensus of the given header.
 
 ## Input
 
