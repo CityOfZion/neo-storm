@@ -449,7 +449,75 @@ Deserialize(data []byte) interface{}
 Deserializes the given data to a stack item.
 
 ## Storage
+#### GetContext
+```
+GetContext() Context
+```
+Returns the current storage context.
+
+#### Put
+```
+Put(ctx Context, key, value []interface{}) 
+```
+Stores the given value at the given key.
+
+#### Get
+```
+Get(ctx Context, key interface{}) interface{}
+```
+Returns the value found at the given key.
+
+#### Delete
+```
+Delete(ctx Context, key interface{}) 
+```
+Delete's the given key from storage.
+
+#### Find
+```
+Find(ctx Context, key interface{}) iterator.Iterator
+```
+Find returns an iterator key-values that match the given key.
 
 ## Transaction
+#### GetHash
+```
+GetHash(t Transacfion) []byte
+```
+Returns the hash for the given transaction.
 
-## Util
+#### GetType
+```
+GetType(t Transacfion) byte
+```
+Returns the type of the given transaction.
+
+#### GetAttributes
+```
+GetAttributes(t Transacfion) []attribute.Attribute 
+```
+Returns the attributes of the given transaction.
+
+#### GetReferences
+```
+GetReferences(t Transacfion) interface{} 
+```
+Returns the references of the given transaction.
+
+#### GetUnspentCoins
+```
+GetUnspentCoins(t Transacfion) interface{} 
+```
+Returns the unspent coins of the given transaction.
+
+#### GetOutputs
+```
+GetOutputs(t Transacfion) []output.Output 
+```
+Returns the outputs of the given transaction
+
+#### GetInputs
+```
+GetInputs(t Transacfion) []input.Input 
+```
+Returns the inputs of the given transaction
