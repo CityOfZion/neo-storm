@@ -374,10 +374,79 @@ GetNextConsensus(h Header) []byte
 Returns the next consensus of the given header.
 
 ## Input
+#### GetHash
+```
+GetHash(in Input) []byte
+```
+Returns the hash field of the given input.
+
+#### GetIndex
+```
+GetIndex(in Input) int
+```
+Returns the index field of the given input.
 
 ## Output
+#### GetAssetID
+```
+GetAssetId(out Output) []byte
+```
+Returns the asset id field of the given output.
+
+#### GetValue
+```
+GetValue(out Output) int
+```
+Returns the value field of the given output.
+
+#### GetScriptHash
+```
+GetScriptHash(out Output) []byte
+```
+Returns the script hash field of the given output.
 
 ## Runtime
+#### CheckWitness
+```
+CheckWitness(hash []byte) bool 
+```
+Verifies if the given hash is the hash of the contract owner.
+
+#### Log
+```
+Log(message string)
+```
+Logs the given message.
+
+#### Notify
+```
+Notify(args ...interface{}) int
+```
+Notify any number of arguments to the VM.
+
+#### GetTime
+```
+GetTime() int
+```
+Returns the current time based on the highest block in the chain.
+
+#### GetTrigger
+```
+GetTrigger() byte
+```
+Returns the trigger type of the execution.
+
+#### Serialize
+```
+Serialize(item interface{}) []byte
+```
+Serialize the given stack item to a slice of bytes.
+
+#### Deserialize
+```
+Deserialize(data []byte) interface{}
+```
+Deserializes the given data to a stack item.
 
 ## Storage
 
