@@ -29,6 +29,17 @@
 - Package manager for smart contract modules that are written in Go
 
 # Installation
+The following section will help you with installing neo-storm and it's dependencies.
+
+## Project dependencies
+### Golang
+neo-storm requires a working and proper ***Golang*** installation. To install Golang you can check out these [installation instructions](https://golang.org/doc/install).
+
+### Godep
+For package management neo-storm uses ***dep***. To install dep you can check out these [installations instructions](https://github.com/golang/dep).
+
+
+# Installing the neo-storm framework
 ### Unix
 `neo-storm` uses [dep](https://github.com/golang/dep) as its dependency manager. After installing `dep` you can run:
 ```
@@ -38,6 +49,7 @@ make install
 After the installation is completed, you can find the binary in `bin/neo-storm` or globally use `neo-storm`.
 
 # Getting started
+Lot's of **examples contracts** can be found in the [examples folder](https://github.com/CityOfZion/neo-storm/tree/master/examples).
 
 ### Create a new smart contract
 To create a new smart contract you can run the `init` command:
