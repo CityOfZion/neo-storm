@@ -40,3 +40,11 @@ func (s *Stack) Pop() StackItem {
 func (s *Stack) Peek() StackItem {
 	return s.data[s.Len()-1]
 }
+
+// Swap swaps the n(th) item with the top of the stack.
+func (s *Stack) Swap(n int) {
+	if n == 0 {
+		panic("cannot swap with index 0")
+	}
+	s.data[s.Len()-n], s.data[s.Len()-1] = s.data[s.Len()-1], s.data[s.Len()-n]
+}
