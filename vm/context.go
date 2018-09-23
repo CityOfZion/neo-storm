@@ -14,14 +14,14 @@ type Context struct {
 // NewContext returns a new context for the given script.
 func NewContext(script []byte) *Context {
 	return &Context{
-		ip:     0,
+		ip:     -1,
 		script: script,
 	}
 }
 
 // NextInstruction returns the next instruction.
 func (ctx *Context) NextInstruction() Instruction {
-	defer func() { ctx.ip++ }()
+	ctx.ip++
 	if ctx.ip >= len(ctx.script)-1 {
 		return RET
 	}

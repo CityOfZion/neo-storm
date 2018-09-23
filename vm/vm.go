@@ -8,6 +8,22 @@ import (
 // State represents the state the VM is currently in.
 type State int
 
+// String implements the fmt.Stringer interface.
+func (s State) String() string {
+	switch s {
+	case StateRunning:
+		return "running"
+	case StateBreak:
+		return "break"
+	case StateHalt:
+		return "halt"
+	case StateFault:
+		return "fault"
+	default:
+		return "unknown"
+	}
+}
+
 // List of viable VM state constants.
 const (
 	StateRunning State = iota
