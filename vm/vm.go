@@ -81,11 +81,35 @@ func (vm *VM) Step() {
 	ctx := vm.context()
 	instr := ctx.NextInstruction()
 	log.Println(instr)
-	// TODO: Add a exec result or something, in later use cases the script could
 	// be out of gas.
 	vm.exec(ctx, instr)
 }
 
-func (vm *VM) exec(ctx *Context, i Instruction) {
-	fmt.Println(i)
+func (vm *VM) exec(ctx *Context, instr Instruction) {
+	// Catch all panics occured during VM execution.
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("error encountered at instruction %d", ctx.ip)
+		}
+	}()
+
+	if instr >= PUSHBYTES1 && instr <= PUSHBYTES75 {
+		b := ctx.readBytes(int(instr))
+		vm.estack.PushVal(b)
+		return
+	}
+
+	switch instr {
+	case PUSHM1, PUSH1, PUSH2, PUSH3, PUSH4,
+		PUSH5, PUSH6, PUSH7, PUSH8, PUSH9, PUSH10,
+		PUSH11, PUSH12, PUSH13, PUSH14, PUSH15, PUSH16:
+		val := int(instr) - int(PUSH1) + 1
+		vm.estack.PushVal(val)
+
+	case PUSH0:
+		vm.estack.PushVal(0)
+
+	case RET:
+		vm.state = StateHalt
+	}
 }

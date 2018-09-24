@@ -19,6 +19,11 @@ func NewContext(script []byte) *Context {
 	}
 }
 
+// Value implements the StackItem interface.
+func (ctx *Context) Value() interface{} {
+	return ctx
+}
+
 // NextInstruction returns the next instruction.
 func (ctx *Context) NextInstruction() Instruction {
 	ctx.ip++

@@ -1,7 +1,6 @@
 package vm
 
-type StackItem interface{}
-
+// Stack represents a general purpose stack with FIFO as its semantics.
 type Stack struct {
 	data []StackItem
 	cap  uint
@@ -27,6 +26,12 @@ func (s *Stack) Len() int {
 // Push pushes an item on to the stack.
 func (s *Stack) Push(item StackItem) {
 	s.data = append(s.data, item)
+}
+
+// PushVal pushes the given value and will automaticaly convert it to a stack
+// item.
+func (s *Stack) PushVal(val interface{}) {
+	s.data = append(s.data, NewItem(val))
 }
 
 // Pop pops an item of the stack.
