@@ -1,9 +1,20 @@
 package vm
 
-// StackItem is an abstraction for data that lives on the stack.
-type StackItem interface {
-	// Value returns the underlying value that is carried by the stack item.
-	Value() interface{}
+import "fmt"
+
+// StackItem represents an item on the stack.
+type StackItem struct {
+	value interface{}
+	kind  StackItemType
+}
+
+func (s *StackItem) Inspect() {
+	switch s.kind {
+	case BigIntType:
+		fmt.Printf("<type: %s, value: %d>\n", s.kind, s.value)
+	case ByteArrayType:
+		fmt.Printf("<type: %s, value: %v string: %s>\n", s.kind, s.value, s.value)
+	}
 }
 
 // StackITemType represents the underlying type of an item on the stack.
@@ -17,16 +28,26 @@ const (
 	ContextType
 )
 
-// Item represents an item on the stack.
-type Item struct {
-	value interface{}
-	kind  StackItemType
+// String implements the fmt.Stringer interface.
+func (s StackItemType) String() string {
+	switch s {
+	case BigIntType:
+		return "BigInteger"
+	case ByteArrayType:
+		return "ByteArray"
+	case ArrayType:
+		return "Array"
+	case ContextType:
+		return "Context"
+	default:
+		return "Unknown"
+	}
 }
 
-// NewItem creates a new Item from the given value. It will automatically convert
+// NewStackItem creates a new StackItem from the given value. It will automatically convert
 // the given value to the correct stack item type. Will panic if the given value
 // is not suitable as a stack item.
-func NewItem(value interface{}) *Item {
+func NewStackItem(value interface{}) *StackItem {
 	var kind StackItemType
 
 	switch value.(type) {
@@ -43,10 +64,5 @@ func NewItem(value interface{}) *Item {
 		panic("Invalid value to construct a stack item")
 	}
 
-	return &Item{value, kind}
-}
-
-// Value implements the StackItem interface.
-func (i *Item) Value() interface{} {
-	return i.value
+	return &StackItem{value, kind}
 }

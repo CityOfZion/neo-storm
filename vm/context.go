@@ -1,6 +1,9 @@
 package vm
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"log"
+)
 
 // Context represents the current VM context.
 type Context struct {
@@ -38,7 +41,8 @@ func (ctx *Context) readByte() byte {
 }
 
 func (ctx *Context) readUint32() uint32 {
-	start, end := ctx.ip, ctx.ip+4
+	ip := ctx.ip + 1
+	start, end := ip, ip+4
 	if end > len(ctx.script) {
 		return 0
 	}
@@ -48,7 +52,8 @@ func (ctx *Context) readUint32() uint32 {
 }
 
 func (ctx *Context) readUint16() uint16 {
-	start, end := ctx.ip, ctx.ip+2
+	ip := ctx.ip + 1
+	start, end := ip, ip+2
 	if end > len(ctx.script) {
 		return 0
 	}
@@ -58,7 +63,10 @@ func (ctx *Context) readUint16() uint16 {
 }
 
 func (ctx *Context) readBytes(n int) []byte {
-	start, end := ctx.ip, ctx.ip+n
+	ip := ctx.ip + 1
+	start, end := ip, ip+n
+	log.Println(start)
+	log.Println(end)
 	if end > len(ctx.script) {
 		return nil
 	}

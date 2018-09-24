@@ -52,14 +52,14 @@ func NewVM() *VM {
 
 // Run executes the given script.
 func (vm *VM) Run(script []byte) {
-	vm.istack.Push(NewContext(script))
+	vm.istack.PushVal(NewContext(script))
 	vm.state = StateRunning
 	for {
 		switch vm.state {
 		case StateRunning:
 			vm.Step()
 		case StateBreak, StateFault, StateHalt:
-			fmt.Printf("VM is stopped in state %v", vm.state)
+			fmt.Printf("VM is stopped in state %v\n", vm.state)
 			return
 		}
 	}
@@ -69,7 +69,7 @@ func (vm *VM) context() *Context {
 	if vm.istack.Len() == 0 {
 		return nil
 	}
-	ctx, ok := vm.istack.Peek().(*Context)
+	ctx, ok := vm.istack.Peek().value.(*Context)
 	if !ok {
 		panic("Expected to peek (*Context)")
 	}
@@ -108,6 +108,29 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 
 	case PUSH0:
 		vm.estack.PushVal(0)
+
+	case PUSHDATA1:
+		b := ctx.readVarBytes()
+		vm.estack.PushVal(b)
+
+	case PUSHDATA2:
+		n := ctx.readUint16()
+		b := ctx.readBytes(int(n))
+		vm.estack.PushVal(b)
+
+	case PUSHDATA4:
+		n := ctx.readUint32()
+		b := ctx.readBytes(int(n))
+		vm.estack.PushVal(b)
+
+	case TOALTSTACK:
+		vm.astack.Push(vm.estack.Pop())
+
+	case FROMALTSTACK:
+		vm.estack.Push(vm.astack.Pop())
+
+	case DUPFROMALTSTACK:
+		vm.estack.Push(vm.astack.Dup())
 
 	case RET:
 		vm.state = StateHalt
