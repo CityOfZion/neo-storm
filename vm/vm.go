@@ -80,8 +80,6 @@ func (vm *VM) context() *Context {
 func (vm *VM) Step() {
 	ctx := vm.context()
 	instr := ctx.NextInstruction()
-	log.Println(instr)
-	// be out of gas.
 	vm.exec(ctx, instr)
 }
 
@@ -89,7 +87,7 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 	// Catch all panics occured during VM execution.
 	defer func() {
 		if err := recover(); err != nil {
-			log.Printf("error encountered at instruction %d", ctx.ip)
+			log.Printf("error encountered at instruction %d => %s", ctx.ip, err)
 		}
 	}()
 
@@ -131,6 +129,55 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 
 	case DUPFROMALTSTACK:
 		vm.estack.Push(vm.astack.Dup())
+
+	case ADD:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		a.Add(a, b)
+		vm.estack.PushVal(a)
+
+	case SUB:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		b.Sub(b, a)
+		vm.estack.PushVal(b)
+
+	case MUL:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		a.Mul(a, b)
+		vm.estack.PushVal(a)
+
+	case DIV:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		b.Div(b, a)
+		vm.estack.PushVal(b)
+
+	case MOD:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		b.Mod(b, a)
+		vm.estack.PushVal(b)
+
+	case SHL:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		b.Lsh(b, uint(a.Int64()))
+		vm.estack.PushVal(b)
+
+	case SHR:
+		a := vm.estack.Pop().BigInt()
+		b := vm.estack.Pop().BigInt()
+
+		b.Rsh(b, uint(a.Int64()))
+		vm.estack.PushVal(b)
 
 	case RET:
 		vm.state = StateHalt

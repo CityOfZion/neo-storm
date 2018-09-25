@@ -30,7 +30,7 @@ func (ctx *Context) Value() interface{} {
 // NextInstruction returns the next instruction.
 func (ctx *Context) NextInstruction() Instruction {
 	ctx.ip++
-	if ctx.ip >= len(ctx.script)-1 {
+	if ctx.ip >= len(ctx.script) {
 		return RET
 	}
 	return Instruction(ctx.script[ctx.ip])

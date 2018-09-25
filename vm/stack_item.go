@@ -1,6 +1,10 @@
 package vm
 
-import "fmt"
+import (
+	"fmt"
+	"math/big"
+	"reflect"
+)
 
 // StackItem represents an item on the stack.
 type StackItem struct {
@@ -8,6 +12,16 @@ type StackItem struct {
 	kind  StackItemType
 }
 
+// BigInt attempts to return the stack item as a big integer type.
+func (s *StackItem) BigInt() *big.Int {
+	val, ok := s.value.(*big.Int)
+	if !ok {
+		panic("this stack item is not of type big integer")
+	}
+	return val
+}
+
+// Inspect returns underlying information about an item on the stack.
 func (s *StackItem) Inspect() {
 	switch s.kind {
 	case BigIntType:
@@ -50,9 +64,13 @@ func (s StackItemType) String() string {
 func NewStackItem(value interface{}) *StackItem {
 	var kind StackItemType
 
-	switch value.(type) {
-	case int64, int:
+	switch t := value.(type) {
+	case *big.Int:
 		kind = BigIntType
+	case int:
+		return &StackItem{big.NewInt(int64(t)), BigIntType}
+	case int64:
+		return &StackItem{big.NewInt(t), BigIntType}
 	case []byte:
 		kind = ByteArrayType
 	case *Context:
@@ -61,6 +79,7 @@ func NewStackItem(value interface{}) *StackItem {
 		kind = ArrayType
 	default:
 		// TODO: be more specific for this error to the end user.
+		fmt.Println(reflect.TypeOf(t))
 		panic("Invalid value to construct a stack item")
 	}
 
