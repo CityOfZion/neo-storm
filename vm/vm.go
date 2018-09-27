@@ -3,6 +3,7 @@ package vm
 import (
 	"fmt"
 	"log"
+	"math/big"
 )
 
 // State represents the state the VM is currently in.
@@ -191,6 +192,35 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		}
 		vm.estack.Push(vm.estack.RemoveAt(n))
 
+	case DROP:
+		_ = vm.estack.Pop()
+
+	case EQUAL:
+		panic("EQUAL: not implemented yet")
+
+	// Bit operations
+	case AND:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+
+		b.And(b, a)
+		vm.estack.PushVal(b)
+
+	case OR:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+
+		b.Or(b, a)
+		vm.estack.PushVal(b)
+
+	case XOR:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+
+		b.Xor(b, a)
+		vm.estack.PushVal(b)
+
+	// Numeric operations
 	case ADD:
 		a := vm.estack.Pop().BigInt()
 		b := vm.estack.Pop().BigInt()
@@ -239,6 +269,101 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 
 		b.Rsh(b, uint(a.Int64()))
 		vm.estack.PushVal(b)
+
+	case BOOLAND:
+		b := vm.estack.Pop().Bool()
+		a := vm.estack.Pop().Bool()
+		vm.estack.PushVal(a && b)
+
+	case BOOLOR:
+		b := vm.estack.Pop().Bool()
+		a := vm.estack.Pop().Bool()
+		vm.estack.PushVal(a || b)
+
+	case NUMEQUAL:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) == 0)
+
+	case NUMNOTEQUAL:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) != 0)
+
+	case LT:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) == -1)
+
+	case GT:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) == 1)
+
+	case LTE:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) <= 0)
+
+	case GTE:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(b) >= 0)
+
+	case MIN:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		val := a
+		if a.Cmp(b) == 1 {
+			val = b
+		}
+		vm.estack.PushVal(val)
+
+	case MAX:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		val := a
+		if a.Cmp(b) == -1 {
+			val = b
+		}
+		vm.estack.PushVal(val)
+
+	case WITHIN:
+		b := vm.estack.Pop().BigInt()
+		a := vm.estack.Pop().BigInt()
+		x := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(a.Cmp(x) <= 0 && x.Cmp(b) == -1)
+
+	case INC:
+		x := vm.estack.Pop().BigInt()
+		x.Add(x, big.NewInt(1))
+		vm.estack.PushVal(x)
+
+	case DEC:
+		x := vm.estack.Pop().BigInt()
+		x.Sub(x, big.NewInt(1))
+		vm.estack.PushVal(x)
+
+	case SIGN:
+		x := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(x.Sign())
+
+	case NEGATE:
+		x := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(x.Neg(x))
+
+	case ABS:
+		x := vm.estack.Pop().BigInt()
+		vm.estack.PushVal(x.Abs(x))
+
+	case NOT:
+		x := vm.estack.Pop().Bool()
+		vm.estack.PushVal(!x)
+
+	case NZ:
+		panic("NZ: not yet implemented")
+
+	// Object operations
 
 	case RET:
 		vm.state = StateHalt

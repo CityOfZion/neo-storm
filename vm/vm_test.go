@@ -82,6 +82,41 @@ func TestTuck(t *testing.T) {
 	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(8))
 }
 
+func TestAnd(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH4, PUSH4, AND)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(4))
+}
+
+func TestOr(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH4, PUSH2, OR)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(6))
+}
+
+func TestXor(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH7, PUSH2, XOR)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(5))
+}
+
+func TestInc(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH7, INC)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(8))
+}
+
+func TestDec(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH7, DEC)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(6))
+}
+
 func TestShl(t *testing.T) {
 	// TODO
 }

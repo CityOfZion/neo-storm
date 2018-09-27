@@ -16,7 +16,16 @@ type StackItem struct {
 func (s *StackItem) BigInt() *big.Int {
 	val, ok := s.value.(*big.Int)
 	if !ok {
-		panic("this stack item is not of type big integer")
+		panic("stack item is not of type big integer")
+	}
+	return val
+}
+
+// Bool attempts to return the stack item as a boolean type.
+func (s *StackItem) Bool() bool {
+	val, ok := s.value.(bool)
+	if !ok {
+		panic("stack item is not of type boolean")
 	}
 	return val
 }
