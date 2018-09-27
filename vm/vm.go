@@ -87,7 +87,7 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 	// Catch all panics occured during VM execution.
 	defer func() {
 		if err := recover(); err != nil {
-			log.Printf("error encountered at instruction %d => %s", ctx.ip, err)
+			log.Printf("error encountered at instruction %s at instruction pointer %d => %s", instr, ctx.ip, err)
 		}
 	}()
 
@@ -129,6 +129,67 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 
 	case DUPFROMALTSTACK:
 		vm.estack.Push(vm.astack.Dup())
+
+	case DUP:
+		vm.estack.Push(vm.estack.Dup())
+
+	case SWAP:
+		a := vm.estack.Pop()
+		b := vm.estack.Pop()
+		vm.estack.Push(a)
+		vm.estack.Push(b)
+
+	case XSWAP:
+		n := int(vm.estack.Pop().BigInt().Int64())
+		if n <= 0 {
+			panic("XSWAP: invalid length")
+		}
+
+		a := vm.estack.PeekN(n)
+		b := vm.estack.Peek()
+		aval := a.value
+		bval := b.value
+		a.value = bval
+		b.value = aval
+
+	case TUCK:
+		n := int(vm.estack.Pop().BigInt().Int64())
+		if n <= 0 {
+			panic("TUCK: invalid length")
+		}
+		vm.estack.InsertAt(vm.estack.Peek(), n)
+		vm.estack.Inspect()
+
+	case ROT:
+		c := vm.estack.Pop()
+		b := vm.estack.Pop()
+		a := vm.estack.Pop()
+
+		vm.estack.Push(b)
+		vm.estack.Push(c)
+		vm.estack.Push(a)
+
+	case NIP:
+		item := vm.estack.Pop()
+		_ = vm.estack.Pop()
+		vm.estack.Push(item)
+
+	case OVER:
+		b := vm.estack.Pop()
+		a := vm.estack.Pop()
+
+		vm.estack.Push(b)
+		vm.estack.Push(a)
+
+	case ROLL:
+		n := int(vm.estack.Pop().BigInt().Int64())
+		if n < 0 {
+			panic("ROLL: popped negative value from the stack")
+		}
+		if n == 0 {
+			panic("ROLL: cannot roll on index 0")
+		}
+		vm.estack.Push(vm.estack.RemoveAt(n))
 
 	case ADD:
 		a := vm.estack.Pop().BigInt()
@@ -182,4 +243,9 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 	case RET:
 		vm.state = StateHalt
 	}
+}
+
+func init() {
+	log.SetFlags(0)
+	log.SetPrefix("[STORM VM] ")
 }

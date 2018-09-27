@@ -46,6 +46,42 @@ func TestMod(t *testing.T) {
 	assert.Equal(t, vm.estack.Len(), 0)
 }
 
+func TestDup(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH2, DUP)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Len(), 2)
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(2))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(2))
+}
+
+func TestSwap(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH2, PUSH5, SWAP)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(2))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(5))
+}
+
+func TestXswap(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH2, PUSH5, PUSH8, PUSH2, XSWAP)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(2))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(5))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(8))
+}
+
+func TestTuck(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH2, PUSH5, PUSH8, PUSH3, TUCK)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(8))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(5))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(2))
+	assert.Equal(t, vm.estack.Pop().BigInt().Int64(), int64(8))
+}
+
 func TestShl(t *testing.T) {
 	// TODO
 }
