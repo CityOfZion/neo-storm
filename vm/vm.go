@@ -159,7 +159,6 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 			panic("TUCK: invalid length")
 		}
 		vm.estack.InsertAt(vm.estack.Peek(), n)
-		vm.estack.Inspect()
 
 	case ROT:
 		c := vm.estack.Pop()
@@ -364,9 +363,81 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		panic("NZ: not yet implemented")
 
 	// Object operations
+	case NEWARRAY, NEWSTRUCT:
+		n := vm.estack.Pop().BigInt().Int64()
+		arr := make([]*StackItem, n)
+		vm.estack.PushVal(arr)
+
+	case APPEND:
+		item := vm.estack.Pop()
+		arr := vm.estack.Pop()
+
+		arr = arr.MustAppend(item)
+		vm.estack.Push(arr)
+
+	case REVERSE:
+
+	case REMOVE:
+
+	case PACK:
+		n := int(vm.estack.Pop().BigInt().Int64())
+		if n < 0 || n > vm.estack.Len() {
+			panic("PACK: invalid length")
+		}
+		items := make([]*StackItem, n)
+		for i := 0; i < n; i++ {
+			items[i] = vm.estack.Pop()
+		}
+		vm.estack.PushVal(items)
+
+	case UNPACK:
+		panic("UNPACK: not yet implemented")
+
+	case PICKITEM:
+		var (
+			index = int(vm.estack.Pop().BigInt().Int64())
+			arr   = vm.estack.Pop()
+		)
+
+		obj, ok := arr.value.([]*StackItem)
+		if !ok {
+			panic("PICKITEM: underlying object is not of type []*StackItem")
+		}
+		if index < 0 || index >= len(obj) {
+			panic("PICKITEM: invalid index")
+		}
+
+		item := obj[index]
+		vm.estack.Push(item)
+
+	case SETITEM:
+		// In this case we don't need to push the array back on the stack.
+		// Cause there is a copy of the same exact pointer on the ALT stack,
+		// hence we modify that value directly. I created a possible security
+		// issue for this:
+		// https://github.com/neo-project/neo-vm/issues/44
+		var (
+			item  = vm.estack.Pop()
+			index = int(vm.estack.Pop().BigInt().Int64())
+			arr   = vm.estack.Pop()
+		)
+
+		obj, ok := arr.value.([]*StackItem)
+		if !ok {
+			panic("SETITEM: underlying object is not of type []*StackItem")
+		}
+		if index < 0 || index >= len(obj) {
+			panic("SETITEM: invalid index")
+		}
+		obj[index] = item
+
+	case ARRAYSIZE:
+
+	case SIZE:
 
 	case RET:
 		vm.state = StateHalt
+
 	}
 }
 

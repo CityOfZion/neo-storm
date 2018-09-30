@@ -30,10 +30,37 @@ func (s *StackItem) Bool() bool {
 	return val
 }
 
+// Array attempts to return the stack item as an array type.
+func (s *StackItem) Array() []*StackItem {
+	val, ok := s.value.([]*StackItem)
+	if !ok {
+		panic("stack item is not of type array")
+	}
+	return val
+}
+
+// MustAppend attempts to append 2 stack items with eachother. This will panic if
+// it the stack items are not appendable. The method will return the new appended
+// StackItem.
+func (s *StackItem) MustAppend(other *StackItem) *StackItem {
+	switch s.kind {
+	case ArrayType:
+		underlying := s.value.([]*StackItem)
+		underlying = append(underlying, other)
+		return NewStackItem(underlying)
+	case ByteArrayType:
+		underlying := s.value.([]byte)
+		underlying = append(underlying, other.value.([]byte)...)
+		return NewStackItem(underlying)
+	default:
+		panic("cannot append on non (ArrayType or ByteArrayType) stack item")
+	}
+}
+
 // Inspect returns underlying information about an item on the stack.
 func (s *StackItem) Inspect() {
 	switch s.kind {
-	case BigIntType:
+	case BigIntType, ArrayType:
 		fmt.Printf("<type: %s, value: %d>\n", s.kind, s.value)
 	case ByteArrayType:
 		fmt.Printf("<type: %s, value: %v string: %s>\n", s.kind, s.value, s.value)
@@ -84,12 +111,13 @@ func NewStackItem(value interface{}) *StackItem {
 		kind = ByteArrayType
 	case *Context:
 		kind = ContextType
-	case []StackItem:
+	case []*StackItem:
 		kind = ArrayType
 	default:
 		// TODO: be more specific for this error to the end user.
-		fmt.Println(reflect.TypeOf(t))
-		panic("Invalid value to construct a stack item")
+		typ := reflect.TypeOf(t)
+		msg := fmt.Sprintf("invalid value to construct a stack item: %v", typ)
+		panic(msg)
 	}
 
 	return &StackItem{value, kind}

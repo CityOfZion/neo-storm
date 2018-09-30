@@ -103,6 +103,14 @@ func TestXor(t *testing.T) {
 	assert.Equal(t, vm.estack.Pop(), NewStackItem(5))
 }
 
+func TestShl(t *testing.T) {
+	// TODO
+}
+
+func TestShr(t *testing.T) {
+	// TODO
+}
+
 func TestInc(t *testing.T) {
 	vm := NewVM()
 	script := createScript(PUSH7, INC)
@@ -117,12 +125,60 @@ func TestDec(t *testing.T) {
 	assert.Equal(t, vm.estack.Pop(), NewStackItem(6))
 }
 
-func TestShl(t *testing.T) {
-	// TODO
+func TestNewArray(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH4, NEWARRAY)
+	vm.Run(script)
+	assert.Equal(t, vm.estack.Pop(), NewStackItem(make([]*StackItem, 4)))
 }
 
-func TestShr(t *testing.T) {
-	// TODO
+func TestAppend(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH2, NEWARRAY, PUSH4, APPEND)
+	vm.Run(script)
+	arr := vm.estack.Pop().Array()
+	assert.Equal(t, 3, len(arr))
+	assert.Equal(t, arr[len(arr)-1], NewStackItem(4))
+}
+
+func TestAppendBytes(t *testing.T) {
+	vm := NewVM()
+	script := createScript(
+		0x03, // PUSHBYTES3
+		Instruction(byte('a')),
+		Instruction(byte('b')),
+		Instruction(byte('c')),
+		0x02, // PUSHBYTES2
+		Instruction(byte('d')),
+		Instruction(byte('e')),
+		APPEND,
+	)
+	vm.Run(script)
+	assert.Equal(t, NewStackItem([]byte("abcde")), vm.estack.Pop())
+}
+
+func TestPack(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH1, PUSH2, PUSH3, PUSH3, PACK)
+	vm.Run(script)
+	assert.Equal(t, 1, vm.estack.Len())
+	assert.Equal(t, 3, len(vm.estack.Pop().Array()))
+	assert.Equal(t, 0, vm.estack.Len())
+}
+
+func TestPickItem(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH1, PUSH2, PUSH3, PUSH3, PACK, PUSH1, PICKITEM)
+	vm.Run(script)
+	assert.Equal(t, NewStackItem(2), vm.estack.Pop())
+}
+
+func TestSetItem(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH1, PUSH2, PUSH3, PUSH3, PACK, PUSH1, PUSH7, SETITEM, PUSH1, PICKITEM) //, PUSH1, PICKITEM)
+	vm.Run(script)
+	assert.Equal(t, NewStackItem(7), vm.estack.Pop())
+
 }
 
 func createScript(instructions ...Instruction) []byte {
