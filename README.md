@@ -29,7 +29,9 @@
 - Package manager for smart contract modules that are written in Go
 
 # Installation
-The following section will help you with installing neo-storm and it's dependencies.
+The following section will help you with installing neo-storm and it's dependencies. 
+
+[**A very in-depth tutorial about how to get started with neo-storm can be found here**](https://medium.com/@likkee.chong/neo-token-contract-nep-5-in-go-f6b0102c59ee)
 
 ## Project dependencies
 ### Golang
@@ -37,7 +39,6 @@ neo-storm requires a working and proper ***Golang*** installation. To install Go
 
 ### Godep
 For package management neo-storm uses ***dep***. To install dep you can check out these [installations instructions](https://github.com/golang/dep).
-
 
 # Installing the neo-storm framework
 ### Unix
@@ -87,6 +88,9 @@ You can change location directory of the output file by adding the `-o, --out` f
 ```
 neo-storm compile -i path/to/file.go -o path/to/file.avm
 ```
+
+# Tutorials
+- [Step-by-step guide on issuing your NEP-5 token on NEO’s Private net using Go](https://medium.com/@likkee.chong/neo-token-contract-nep-5-in-go-f6b0102c59ee)
 
 # Contributing
 Feel free to contribute to this project after reading the
