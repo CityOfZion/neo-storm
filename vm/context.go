@@ -36,6 +36,19 @@ func (ctx *Context) NextInstruction() Instruction {
 	return Instruction(ctx.script[ctx.ip])
 }
 
+// Copy creates a clone of its own. These share not memory with eachother.
+func (ctx *Context) Copy() *Context {
+	// Create hard copy of the script to exclude any nasty issues that can
+	// come out of this.
+	script := make([]byte, len(ctx.script))
+	copy(script, ctx.script)
+
+	return &Context{
+		ip:     ctx.ip,
+		script: script,
+	}
+}
+
 func (ctx *Context) readByte() byte {
 	return ctx.readBytes(1)[0]
 }

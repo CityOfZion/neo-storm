@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"reflect"
 )
 
 // State represents the state the VM is currently in.
@@ -33,6 +34,8 @@ const (
 	StateHalt
 )
 
+type InteropFunc func(vm *VM) error
+
 // VM represents the NEO virtual machine that is compatible with .avm bytecode.
 type VM struct {
 	estack *Stack // evaluation stack
@@ -40,6 +43,8 @@ type VM struct {
 	istack *Stack // invocation stack
 
 	state State
+
+	interop map[string]InteropFunc
 }
 
 // NewVM returns a pointer to a newly created VM.
@@ -195,7 +200,9 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		_ = vm.estack.Pop()
 
 	case EQUAL:
-		panic("EQUAL: not implemented yet")
+		a := vm.estack.Pop()
+		b := vm.estack.Pop()
+		vm.estack.PushVal(reflect.DeepEqual(a, b))
 
 	// Bit operations
 	case AND:
@@ -431,14 +438,76 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		}
 		obj[index] = item
 
-	case ARRAYSIZE:
+	case ARRAYSIZE, SIZE:
+		arr := vm.estack.Pop()
+		obj, ok := arr.value.([]*StackItem)
+		if !ok {
+			panic("ARRAYSIZE: item is not of type []*StackItem")
+		}
+		vm.estack.PushVal(len(obj))
 
-	case SIZE:
+	// Jump operations
+	case JMP, JMPIF, JMPIFNOT:
+		var (
+			rOffset = int16(ctx.readUint16())
+			offset  = ctx.ip + int(rOffset) - 3 // sizeOf(int16 + uint8)
+		)
+		if offset < 0 || offset > len(ctx.script) {
+			panic(fmt.Sprintf("JMP: invalid offset %d ip at %d", offset, ctx.ip))
+		}
+		cond := true
+		if instr > JMP {
+			cond = vm.estack.Pop().Bool()
+			if instr == JMPIFNOT {
+				cond = !cond
+			}
+		}
+		if cond {
+			ctx.ip = offset
+		}
+
+	case CALL:
+		vm.istack.PushVal(ctx.Copy())
+		ctx.ip += 2
+		vm.exec(vm.context(), JMP)
+
+	case SYSCALL:
+		api := ctx.readVarBytes()
+		fun, ok := vm.interop[string(api)]
+		if !ok {
+			reportError("SYSCALL", "interop hook %s is not registered within the VM", api)
+		}
+		if err := fun(vm); err != nil {
+			reportError("SYSCALL", "error occured during syscall execution: %s", err)
+		}
+
+	case APPCALL:
+		// todo
+
+	// Cryptographical operations
+	case SHA1:
+	case SHA256:
+	case HASH256:
+	case HASH160:
+	case CHECKSIG:
+	case CHECKMULTISIG:
+
+	case NOP:
+
+	case THROW:
+	case THROWIFNOT:
 
 	case RET:
-		vm.state = StateHalt
-
+		_ = vm.istack.Pop()
+		if vm.istack.Len() == 0 {
+			vm.state = StateHalt
+		}
 	}
+}
+
+func reportError(instruction string, msg string, args ...interface{}) {
+	m := fmt.Sprintf("%s: %s", instruction, fmt.Sprintf(msg, args...))
+	panic(m)
 }
 
 func init() {

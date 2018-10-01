@@ -174,11 +174,14 @@ func TestPickItem(t *testing.T) {
 }
 
 func TestSetItem(t *testing.T) {
-	vm := NewVM()
-	script := createScript(PUSH1, PUSH2, PUSH3, PUSH3, PACK, PUSH1, PUSH7, SETITEM, PUSH1, PICKITEM) //, PUSH1, PICKITEM)
-	vm.Run(script)
-	assert.Equal(t, NewStackItem(7), vm.estack.Pop())
+	// TOOD: Cannot directly test this.
+}
 
+func TestArraySize(t *testing.T) {
+	vm := NewVM()
+	script := createScript(PUSH1, PUSH2, PUSH3, PUSH3, PACK, ARRAYSIZE)
+	vm.Run(script)
+	assert.Equal(t, NewStackItem(3), vm.estack.Pop())
 }
 
 func createScript(instructions ...Instruction) []byte {
