@@ -39,6 +39,15 @@ func (s *StackItem) Array() []*StackItem {
 	return val
 }
 
+// Bytes attempts to return the stack item as a byte array type.
+func (s *StackItem) Bytes() []byte {
+	val, ok := s.value.([]byte)
+	if !ok {
+		panic("stack item is not of type byte array")
+	}
+	return val
+}
+
 // MustAppend attempts to append 2 stack items with eachother. This will panic if
 // it the stack items are not appendable. The method will return the new appended
 // StackItem.

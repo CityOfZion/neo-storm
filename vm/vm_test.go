@@ -184,6 +184,54 @@ func TestArraySize(t *testing.T) {
 	assert.Equal(t, NewStackItem(3), vm.estack.Pop())
 }
 
+func TestSha1(t *testing.T) {
+	vm := NewVM()
+	script := createScript(
+		0x03,
+		Instruction(byte('a')),
+		Instruction(byte('b')),
+		Instruction(byte('c')),
+		SHA1,
+	)
+	vm.Run(script)
+}
+
+func TestSha256(t *testing.T) {
+	vm := NewVM()
+	script := createScript(
+		0x03,
+		Instruction(byte('a')),
+		Instruction(byte('b')),
+		Instruction(byte('c')),
+		SHA256,
+	)
+	vm.Run(script)
+}
+
+func TestHash256(t *testing.T) {
+	vm := NewVM()
+	script := createScript(
+		0x03,
+		Instruction(byte('a')),
+		Instruction(byte('b')),
+		Instruction(byte('c')),
+		HASH256,
+	)
+	vm.Run(script)
+}
+
+func TestHash160(t *testing.T) {
+	vm := NewVM()
+	script := createScript(
+		0x03,
+		Instruction(byte('a')),
+		Instruction(byte('b')),
+		Instruction(byte('c')),
+		HASH160,
+	)
+	vm.Run(script)
+}
+
 func createScript(instructions ...Instruction) []byte {
 	script := make([]byte, len(instructions))
 	for i, instr := range instructions {

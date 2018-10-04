@@ -383,8 +383,10 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		vm.estack.Push(arr)
 
 	case REVERSE:
+		// TODO
 
 	case REMOVE:
+		// TODO
 
 	case PACK:
 		n := int(vm.estack.Pop().BigInt().Int64())
@@ -482,20 +484,43 @@ func (vm *VM) exec(ctx *Context, instr Instruction) {
 		}
 
 	case APPCALL:
-		// todo
+		// TODO
 
 	// Cryptographical operations
 	case SHA1:
+		b := vm.estack.Pop().Bytes()
+		hash := Sha1(b)
+		vm.estack.PushVal(hash)
+
 	case SHA256:
+		b := vm.estack.Pop().Bytes()
+		hash := Sha256(b)
+		vm.estack.PushVal(hash)
+
 	case HASH256:
+		b := vm.estack.Pop().Bytes()
+		hash := Hash256(b)
+		vm.estack.PushVal(hash)
+
 	case HASH160:
+		b := vm.estack.Pop().Bytes()
+		hash := Hash160(b)
+		vm.estack.PushVal(hash)
+
 	case CHECKSIG:
+		// TODO
+
 	case CHECKMULTISIG:
+		// TODO
 
 	case NOP:
+		// ¯\_(ツ)_/¯
 
 	case THROW:
+		// TODO
+
 	case THROWIFNOT:
+		// TODO
 
 	case RET:
 		_ = vm.istack.Pop()
