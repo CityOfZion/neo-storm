@@ -79,6 +79,10 @@ func main() {
 					Name:  "name, n",
 					Usage: "name of the smart-contract to be initialized",
 				},
+				cli.BoolFlag{
+					Name:  "skip-details, skip",
+					Usage: "skip filling in the projects and contract details",
+				},
 			},
 		},
 	}
@@ -105,10 +109,13 @@ func initSmartContract(ctx *cli.Context) error {
 		return cli.NewExitError(err, 1)
 	}
 
-	// Ask contract information and write a .storm file
-	details := parseContractDetails()
-	if err := ioutil.WriteFile(filepath.Join(basePath, "storm.yml"), details.toStormFile(), 0644); err != nil {
-		return cli.NewExitError(err, 1)
+	// Ask contract information and write a storm.yml file unless the -skip-details flag is set.
+	// TODO: Fix the missing storm.yml file with the `init` command when the package manager is in place.
+	if !ctx.Bool("skip-details") {
+		details := parseContractDetails()
+		if err := ioutil.WriteFile(filepath.Join(basePath, "storm.yml"), details.toStormFile(), 0644); err != nil {
+			return cli.NewExitError(err, 1)
+		}
 	}
 
 	data := []byte(fmt.Sprintf(smartContractTmpl, contractName))
