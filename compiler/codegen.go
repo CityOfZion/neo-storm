@@ -87,18 +87,13 @@ func (c *codegen) emitLoadLocal(name string) {
 }
 
 func (c *codegen) emitLoadLocalPos(pos int) {
-	emitOpcode(c.prog, vm.FROMALTSTACK)
-	emitOpcode(c.prog, vm.DUP)
-	emitOpcode(c.prog, vm.TOALTSTACK)
-
+	emitOpcode(c.prog, vm.DUPFROMALTSTACK)
 	emitInt(c.prog, int64(pos))
 	emitOpcode(c.prog, vm.PICKITEM)
 }
 
 func (c *codegen) emitStoreLocal(pos int) {
-	emitOpcode(c.prog, vm.FROMALTSTACK)
-	emitOpcode(c.prog, vm.DUP)
-	emitOpcode(c.prog, vm.TOALTSTACK)
+	emitOpcode(c.prog, vm.DUPFROMALTSTACK)
 
 	if pos < 0 {
 		log.Fatalf("invalid position to store local: %d", pos)
