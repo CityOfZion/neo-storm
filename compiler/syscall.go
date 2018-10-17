@@ -11,7 +11,7 @@ var syscalls = map[string]map[string]string{
 	"runtime": {
 		"GetTrigger":   "System.Runtime.GetTrigger",
 		"CheckWitness": "System.Runtime.CheckWitness",
-		"Notify":       "System.Runtime.Notify",
+		"Notify":       "Neo.Runtime.Notify",
 		"Log":          "System.Runtime.Log",
 		"GetTime":      "System.Runtime.GetTime",
 		"Serialize":    "System.Runtime.Serialize",

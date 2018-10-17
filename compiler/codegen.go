@@ -144,6 +144,10 @@ func (c *codegen) convertFuncDecl(file *ast.File, decl *ast.FuncDecl) {
 
 	f, ok = c.funcs[decl.Name.Name]
 	if ok {
+		// If this function is a syscall we will not convert it to bytecode.
+		if isSyscall(f) {
+			return
+		}
 		c.setLabel(f.label)
 	} else {
 		f = c.newFunc(decl)
@@ -269,7 +273,6 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 			ast.Walk(c, n.Results[0])
 		}
 
-		emitOpcode(c.prog, vm.NOP) // @OPTIMIZE
 		emitOpcode(c.prog, vm.FROMALTSTACK)
 		emitOpcode(c.prog, vm.DROP) // Cleanup the stack.
 		emitOpcode(c.prog, vm.RET)
@@ -425,11 +428,6 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 
-		// c# compiler adds a NOP (0x61) before every function call. Dont think its relevant
-		// and we could easily removed it, but to be consistent with the original compiler I
-		// will put them in. ^^
-		emitOpcode(c.prog, vm.NOP)
-
 		// Check builtin first to avoid nil pointer on funcScope!
 		if isBuiltin {
 			// Use the ident to check, builtins are not in func scopes.
@@ -441,11 +439,6 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 			emitCall(c.prog, vm.CALL, int16(f.label))
 		}
 
-		// If we are not assigning this function to a variable we need to drop
-		// (cleanup) the top stack item. It's not a void but you get the point \o/.
-		if _, ok := c.scope.voidCalls[n]; ok {
-			emitOpcode(c.prog, vm.DROP)
-		}
 		return nil
 
 	case *ast.SelectorExpr:
@@ -539,7 +532,6 @@ func (c *codegen) convertSyscall(api, name string) {
 		log.Fatalf("unknown VM syscall api: %s", name)
 	}
 	emitSyscall(c.prog, api)
-	emitOpcode(c.prog, vm.NOP) // @OPTIMIZE
 }
 
 func (c *codegen) convertBuiltin(expr *ast.CallExpr) {
