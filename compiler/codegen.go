@@ -261,7 +261,7 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 		// To be backwards compatible we will put them them in.
 		// See issue #65 (https://github.com/CityOfZion/neo-go/issues/65)
 		l := c.newLabel()
-		emitJmp(c.prog, vm.JMP, int16(l))
+		// emitJmp(c.prog, vm.JMP, int16(l))
 		c.setLabel(l)
 
 		if len(n.Results) > 0 {
@@ -527,6 +527,10 @@ func (c *codegen) convertSyscall(api, name string) {
 		log.Fatalf("unknown VM syscall api: %s", name)
 	}
 	emitSyscall(c.prog, api)
+
+	// This NOP instruction is basically not needed, but if we do, we have a
+	// one to one matching avm file with neo-python which is very nice for debugging.
+	emitOpcode(c.prog, vm.NOP)
 }
 
 func (c *codegen) convertBuiltin(expr *ast.CallExpr) {
