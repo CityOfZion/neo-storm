@@ -272,6 +272,8 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 	case *ast.IfStmt:
 		lIf := c.newLabel()
 		lElse := c.newLabel()
+		lElseEnd := c.newLabel()
+
 		if n.Cond != nil {
 			ast.Walk(c, n.Cond)
 			emitJmp(c.prog, vm.JMPIFNOT, int16(lElse))
@@ -279,11 +281,15 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 
 		c.setLabel(lIf)
 		ast.Walk(c, n.Body)
+		if n.Else != nil {
+			emitJmp(c.prog, vm.JMP, int16(lElseEnd))
+		}
 
 		c.setLabel(lElse)
 		if n.Else != nil {
 			ast.Walk(c, n.Else)
 		}
+		c.setLabel(lElseEnd)
 		return nil
 
 	case *ast.BasicLit:
