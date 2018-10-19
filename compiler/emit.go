@@ -92,7 +92,8 @@ func emitCall(w *bytes.Buffer, instr vm.Instruction, label int16) error {
 
 func emitJmp(w *bytes.Buffer, instr vm.Instruction, label int16) error {
 	if !isInstrJmp(instr) {
-		return fmt.Errorf("instruction %s is not a jump or call type", instr)
+		// TODO: Generate stringer for the instructions so we can use %s in formats.
+		return fmt.Errorf("instruction %v is not a jump or call type", instr)
 	}
 	buf := make([]byte, 2)
 	binary.LittleEndian.PutUint16(buf, uint16(label))
