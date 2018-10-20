@@ -92,7 +92,7 @@ func emitCall(w *bytes.Buffer, instr vm.Instruction, label int16) error {
 
 func emitJmp(w *bytes.Buffer, instr vm.Instruction, label int16) error {
 	if !isInstrJmp(instr) {
-		// TODO: After stringer for instruction is generated %v can be replaced with %s.
+		// TODO: Generate stringer for the instructions so we can use %s in formats.
 		return fmt.Errorf("instruction %v is not a jump or call type", instr)
 	}
 	buf := make([]byte, 2)
