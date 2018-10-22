@@ -158,7 +158,7 @@ func contractTestInvoke(ctx *cli.Context) error {
 	}
 
 	// FIXME: Make this configurable (probably in the general storm.yml file/config)
-	endpoint := "http://seed3.ngd.network:10332"
+	endpoint := "http://seed4.ngd.network:10332"
 	client, err := rpc.NewClient(context.TODO(), endpoint, rpc.ClientOptions{})
 	if err != nil {
 		return cli.NewExitError(err, 1)
