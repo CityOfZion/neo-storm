@@ -85,6 +85,17 @@ func main() {
 				},
 			},
 		},
+		{
+			Name:   "inspect",
+			Usage:  "creates a user readable dump of the program instructions",
+			Action: inspect,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "in, i",
+					Usage: "input file of the program",
+				},
+			},
+		},
 	}
 	ctl.Run(os.Args)
 }
@@ -233,4 +244,13 @@ func parseContractDetails() ContractDetails {
 	details.Description, _ = reader.ReadString('\n')
 
 	return details
+}
+
+func inspect(ctx *cli.Context) error {
+	src := ctx.String("in")
+	if len(src) == 0 {
+		return cli.NewExitError(errNoInput, 1)
+	}
+	compiler.CompileAndInspect(src)
+	return nil
 }
