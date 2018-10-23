@@ -90,9 +90,8 @@ func CompileAndSave(src string, o *Options) error {
 	if err != nil {
 		return fmt.Errorf("Error while trying to compile smart contract file: %v", err)
 	}
-	if o.Debug {
-		log.Println(hex.EncodeToString(b))
-	}
+
+	log.Println(hex.EncodeToString(b))
 
 	out := fmt.Sprintf("%s.%s", o.Outfile, o.Ext)
 	return ioutil.WriteFile(out, b, os.ModePerm)
