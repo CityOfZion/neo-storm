@@ -37,7 +37,7 @@ func emitInt(w *bytes.Buffer, i int64) error {
 		return emitOpcode(w, vm.PUSHF)
 	}
 	if i > 0 && i < 16 {
-		val := vm.Instruction((int(vm.PUSH1) - 1 + int(i)))
+		val := vm.Instruction(int(vm.PUSH1) - 1 + int(i))
 		return emitOpcode(w, val)
 	}
 
@@ -113,8 +113,9 @@ func arrayReverse(b []byte) []byte {
 		return b
 	}
 	dest := make([]byte, len(b))
-	for i, j := 0, len(b)-1; i < j+1; i, j = i+1, j-1 {
-		dest[i], dest[j] = b[j], b[i]
+	ln := len(b) - 1
+	for i := 0; i <= ln/2; i++ {
+		dest[i], dest[ln-i] = b[ln-i], b[i]
 	}
 	return dest
 }
