@@ -372,14 +372,26 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 			// example:
 			// const x = 10
 			// x + 2 will results into 12
-			if tinfo := c.typeInfo.Types[n]; tinfo.Value != nil {
+			tinfo := c.typeInfo.Types[n]
+			if tinfo.Value != nil {
 				c.emitLoadConst(tinfo)
 				return nil
 			}
 
 			ast.Walk(c, n.X)
 			ast.Walk(c, n.Y)
-			c.convertToken(n.Op)
+
+			// VM has separate opcode for string concatenation
+			if n.Op == token.ADD {
+				typ, ok := tinfo.Type.Underlying().(*types.Basic)
+				if ok && typ.Kind() == types.String {
+					emitOpcode(c.prog, vm.CAT)
+				} else {
+					emitOpcode(c.prog, vm.ADD)
+				}
+			} else {
+				c.convertToken(n.Op)
+			}
 			return nil
 		}
 
@@ -452,6 +464,12 @@ func (c *codegen) Visit(node ast.Node) ast.Visitor {
 					emitInt(c.prog, int64(i+1))
 					emitOpcode(c.prog, vm.XSWAP)
 					emitOpcode(c.prog, vm.DROP)
+				}
+			}
+			if numArgs > 3 {
+				for i := 1; i < numArgs; i++ {
+					emitInt(c.prog, int64(i))
+					emitOpcode(c.prog, vm.ROLL)
 				}
 			}
 		}
