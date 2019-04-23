@@ -2,6 +2,9 @@
 BUILD_DIR=bin
 BIN=neo-storm
 INSTALL_PATH=/usr/local/bin
+GOVERSION := $(shell go version | sed 's/^.*go//g' | sed 's/ .*//g')
+GO110 = 1.10.8
+LOWER=$(shell echo $(GOVERSION) $(GO110) | tr " " "\n" | sort -V | head -n 1)
 
 help:          ## Show available options with this Makefile
 	@grep -F -h "##" $(MAKEFILE_LIST) | grep -v grep | awk 'BEGIN { FS = ":.*?##" }; { printf "%-18s  %s\n", $$1,$$2 }'
@@ -14,7 +17,11 @@ install: deps ## Build and install neo-storm cli application
 
 deps:   ## Build all the dependencies.
 	@echo "installing project dependencies"
+ifeq ($(GOVERSION),$(LOWER))
 	@dep ensure
+else
+	@go mod download
+endif
 
 clean:  ## Clean the build-directory
 	@echo "cleaning build artifacts"
