@@ -37,15 +37,19 @@ The following section will help you with installing neo-storm and it's dependenc
 ### Golang
 neo-storm requires a working and proper ***Golang*** installation. To install Golang you can check out these [installation instructions](https://golang.org/doc/install).
 
-### Godep
-For package management neo-storm uses ***dep***. To install dep you can check out these [installations instructions](https://github.com/golang/dep).
+### Denpendency
+For package management ,
+* When go version is less than go1.11.0 neo-storm uses ***dep*** . To install dep you can check out these [installations instructions](https://github.com/golang/dep).
+
+* When go version is or greater than go1.11.0, neo-storm uses ***go mod***.
 
 # Installing the neo-storm framework
 ### Unix
-`neo-storm` uses [dep](https://github.com/golang/dep) as its dependency manager. After installing `dep` you can run:
+`neo-storm` uses [dep](https://github.com/golang/dep) as its dependency manager when go version is less than go1.11.0. After installing `dep` you can run:
 ```
 make install
 ```
+> if your go version is greater than go1.11.0, you can run this directly.
 
 After the installation is completed, you can find the binary in `bin/neo-storm` or globally use `neo-storm`.
 
